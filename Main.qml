@@ -5,7 +5,6 @@ import QtMultimedia 5.7
 import "components"
 
 Rectangle {
-    // Main Container
     id: container
 
     LayoutMirroring.enabled: Qt.locale().textDirection == Qt.RightToLeft
@@ -13,7 +12,10 @@ Rectangle {
 
     property int sessionIndex: session.index
 
-    // Inherited from SDDMComponents
+    property string clrForeground: "#FFFFFF"
+    property string clrMuted: "#909090"
+    property string clrMutedExtra: "#505050"
+
     TextConstants {
         id: textConstants
     }
@@ -190,8 +192,6 @@ Rectangle {
         }
     }
 
-
-
     // Clock and Login Area
     Rectangle {
         id: rectangle
@@ -202,7 +202,7 @@ Rectangle {
             id: clock
             y: parent.height * config.relativePositionY - clock.height / 2
             x: parent.width * config.relativePositionX - clock.width / 2
-            color: "white"
+            color: clrForeground
             timeFont.family: textFont.name
             dateFont.family: textFont.name
         }
@@ -236,7 +236,7 @@ Rectangle {
                     font.family: textFont.name
                     font.bold: true
                     font.pixelSize: 16
-                    color: "white"
+                    color: clrForeground
                     text: "Username"
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -245,15 +245,20 @@ Rectangle {
                     id: username_input_box
                     height: parent.height
                     text: userModel.lastUser
+                    radius: 24
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: username_label.right
                     anchors.leftMargin: config.usernameLeftMargin
                     anchors.right: parent.right
                     anchors.rightMargin: 0
                     font: textFont.name
-                    color: "#25000000"
-                    borderColor: "transparent"
-                    textColor: "white"
+                    
+                    color: "transparent"
+                    borderColor: clrMuted
+                    textColor: clrForeground
+                    hoverColor: clrForeground
+                    focusColor: clrForeground
+                    
 
                     Keys.onPressed: {
                         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
@@ -280,29 +285,34 @@ Rectangle {
                 Text {
                     id: password_label
                     width: parent.width * 0.27
-                    text: textConstants.password
+                    text: "Password"
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignLeft
                     font.family: textFont.name
                     font.bold: true
                     font.pixelSize: 16
-                    color: "white"
+                    color: clrForeground
                 }
 
                 PasswordBox {
                     id: password_input_box
                     height: parent.height
                     font: textFont.name
-                    color: "#25000000"
+                    radius: 24
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: parent.height // this sets button width, this way its a square
                     anchors.left: password_label.right
                     anchors.leftMargin: config.passwordLeftMargin
-                    borderColor: "transparent"
-                    textColor: "white"
+
+                    color: "transparent"
+                    borderColor: clrMuted
+                    textColor: clrForeground
+                    hoverColor: clrForeground
+                    focusColor: clrForeground
                     tooltipBG: "#25000000"
                     tooltipFG: "#dc322f"
+
                     image: "components/resources/warning_red.png"
                     onTextChanged: {
                         if (password_input_box.text == "") {
@@ -409,60 +419,15 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 color: "transparent"
                 arrowColor: "transparent"
-                textColor: "#505050"
+                textColor: clrMutedExtra
                 borderColor: "transparent"
-                hoverColor: "#5692c4"
+                hoverColor: clrMuted
 
                 model: sessionModel
                 index: sessionModel.lastIndex
 
                 KeyNavigation.backtab: shutdown_button
                 KeyNavigation.tab: password_input_box
-            }
-
-            ComboBox {
-                id: language
-
-                model: keyboard.layouts
-                index: keyboard.currentLayout
-                width: 50
-                height: 20
-                anchors.verticalCenter: parent.verticalCenter
-                color: "transparent"
-                arrowColor: "transparent"
-                textColor: "white"
-                borderColor: "transparent"
-                hoverColor: "#5692c4"
-
-                onValueChanged: keyboard.currentLayout = id
-
-                Connections {
-                    target: keyboard
-
-                    function onCurrentLayoutChanged() {
-                        combo.index = keyboard.currentLayout
-                    }
-                }
-
-                rowDelegate: Rectangle {
-                    color: "transparent"
-
-                    Text {
-                        anchors.margins: 4
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-
-                        verticalAlignment: Text.AlignVCenter
-
-                        text: modelItem ? modelItem.modelData.shortName : "zz"
-                        font.family: textFont.name
-                        font.pixelSize: 14
-                        //color: "white"
-                        color: "#505050"
-                    }
-                }
-                KeyNavigation.backtab: session
-                KeyNavigation.tab: username_input_box
             }
         }
 
