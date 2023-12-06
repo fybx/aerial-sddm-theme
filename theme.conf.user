@@ -1,9 +1,9 @@
 [General]
-day_time_start=7
-day_time_start=19
+day_time_start=9
+day_time_start=18
 background_vid_day=playlists/day.m3u
 background_vid_night=playlists/night.m3u
-displayFont="Misc Fixed"
+displayFont="SF Pro Display"
 passwordLeftMargin=15
 relativePositionX=0.5
 relativePositionY=0.75
